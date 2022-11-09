@@ -1,0 +1,2 @@
+# noveny
+Növényes feladat
