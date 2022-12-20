@@ -1,4 +1,4 @@
-# noveny
+# Automata öntöző rendszer
 GKNB_INTM020 Mikroelektromechanikai rendszerek
 
 Ebben a projektben, egy növény talajának nedvességét figyelő, és az öntöző eszközt építettünk. De miért is van szükség egy ehhez hasonló öntöző rendszerre? Ebben a kis méretben az eszköz otthoni használatra megfelel így ha például nyaralni megyünk sem kell attól tartani, hogy növénykénk kiszáradna.
