@@ -20,7 +20,7 @@ void setup() {
   initProperties();
 
   
-  ArduinoCloud.begin(ArduinoIoTPreferredConnection); // Az arduino cloud szolgáltatását vettük.
+  ArduinoCloud.begin(ArduinoIoTPreferredConnection); // Az arduino cloud szolgáltatását vettük ígénybe
   
   pinMode(Relaypin, OUTPUT);
   digitalWrite(Relaypin, LOW);
