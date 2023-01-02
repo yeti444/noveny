@@ -51,7 +51,7 @@ void loop() {
   }
   
 
-  delay(10000);
+  delay(1000);
 }
 
     void pumpOn() {
