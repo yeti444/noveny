@@ -1,3 +1,4 @@
+#include "arduino_secrets.h"
 #include "thingProperties.h"
 
 int Relaypin= 2;
@@ -38,14 +39,13 @@ void setup() {
 }
 
 void loop() {
-  ArduinoCloud.update();
   
   soilMoistureValue = analogRead(sensorPin);
   soilMoisturePercent = map(soilMoistureValue, DryValue, WetValue, 0, 100); // "map-oljuk" a %-ra
   soilMoisturePercent = constrain(soilMoisturePercent, 0, 100); // hibakezelés 0-nál alacsonyabb illteve 100-nál magasabb % érték kiküszöbölése
 
   current_Moisture = soilMoisturePercent;
-  
+  ArduinoCloud.update();
   
 
   if (soilMoisturePercent <= pump_trigger) {
@@ -53,7 +53,6 @@ void loop() {
     time_now = millis();
     while(millis() < time_now + period1){
         pumpOn();
-        ArduinoCloud.update();
     }
 
   }
@@ -61,8 +60,7 @@ void loop() {
     time_now = millis();
     while(millis() < time_now + period2)
     {
-        pumpOff();
-        ArduinoCloud.update();
+        pumpOff();  
     }
 }
 
@@ -70,14 +68,14 @@ void loop() {
   digitalWrite(Relaypin, HIGH);
   pump_status_text = "ON";
   pump_Status = true;
- 
+  ArduinoCloud.update();
   }
  
 void pumpOff() {
   digitalWrite(Relaypin, LOW);
   pump_status_text = "OFF";
   pump_Status = false;
- 
+  ArduinoCloud.update();	
   }
   
 void onTriggerLevelChange()  {
