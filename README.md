@@ -8,5 +8,4 @@ Az itt látható dokumentumok segítségével otthon is egyszerűen létrehozhat
 Készítette:
 
 BL2NDD - Jakab Kristóf Márk
-
 A2UWSD - Kiss Vince Gergely
