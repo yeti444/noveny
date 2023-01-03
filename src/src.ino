@@ -1,3 +1,4 @@
+#include "arduino_secrets.h"
 #include "thingProperties.h"
 
 int Relaypin= 2;
@@ -53,7 +54,6 @@ void loop() {
     time_now = millis();
     while(millis() < time_now + period1){
         pumpOn();
-        ArduinoCloud.update();
     }
 
   }
@@ -62,7 +62,6 @@ void loop() {
     while(millis() < time_now + period2)
     {
         pumpOff();
-        ArduinoCloud.update();
     }
 }
 
