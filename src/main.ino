@@ -45,13 +45,14 @@ void loop() {
 
   if (soilMoisturePercent <= pump_trigger) {
     pumpOn();
- 
+	delay(2000);
+	pumpOff();
   } else {
     pumpOff();
   }
   
 
-  delay(1000);
+  delay(10000);
 }
 
     void pumpOn() {
