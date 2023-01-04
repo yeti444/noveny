@@ -21,6 +21,16 @@ adapterrel.
 5. Az eszköz ezután érzékeli a talaj nedvesség tartalmát, és ha szükség van rá, megkezdi 
 az öntözést amíg el nem érjük a kívánt nedvességet.
 
+<picture>
+ <img alt="YOUR-ALT-TEXT" src="YOUR-DEFAULT-IMAGE">
+</picture>
+<picture>
+ <img alt="YOUR-ALT-TEXT" src="YOUR-DEFAULT-IMAGE">
+</picture>
+<picture>
+ <img alt="YOUR-ALT-TEXT" src="YOUR-DEFAULT-IMAGE">
+</picture>
+
 ### Online felület elérése
 
 1. Elsőként várjuk meg, míg az eszköz csatlakozott a beállított WIFI hálózathoz. Ezt 
