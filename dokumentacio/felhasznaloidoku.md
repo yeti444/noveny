@@ -22,13 +22,13 @@ adapterrel.
 az öntözést amíg el nem érjük a kívánt nedvességet.
 
 <picture>
- <img src="https://user-images.githubusercontent.com/121089926/210604169-20dcce7c-d3d4-4308-ade4-cdee1a6e0174.jpg" width="30">
+ <img src="https://user-images.githubusercontent.com/121089926/210604169-20dcce7c-d3d4-4308-ade4-cdee1a6e0174.jpg" width="300">
 </picture>
 <picture>
- <img src="https://user-images.githubusercontent.com/121089926/210604187-2d500148-944f-4f1f-b71b-823989f6d470.jpg" width="30">
+ <img src="https://user-images.githubusercontent.com/121089926/210604187-2d500148-944f-4f1f-b71b-823989f6d470.jpg" width="300">
 </picture>
 <picture>
- <img src="https://user-images.githubusercontent.com/121089926/210604198-8ae72d32-5460-4da2-9ce0-43390b08d84e.jpg" width="30">
+ <img src="https://user-images.githubusercontent.com/121089926/210604198-8ae72d32-5460-4da2-9ce0-43390b08d84e.jpg" width="300">
 </picture>
 
 ### Online felület elérése
@@ -53,6 +53,4 @@ hiszen ez az eszköz rossz működéséhez, illetve a pumpálás teljes leállá
 Jakab Kristóf Márk - BL2NDD
 
 Kiss Vince Gergely - A2UWSD
-![20230102_133032](https://user-images.githubusercontent.com/121089926/210604169-20dcce7c-d3d4-4308-ade4-cdee1a6e0174.jpg)
-![20230102_133052](https://user-images.githubusercontent.com/121089926/210604187-2d500148-944f-4f1f-b71b-823989f6d470.jpg)
-![20230102_142218](https://user-images.githubusercontent.com/121089926/210604198-8ae72d32-5460-4da2-9ce0-43390b08d84e.jpg)
+
