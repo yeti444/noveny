@@ -41,4 +41,5 @@ hiszen ez az eszköz rossz működéséhez, illetve a pumpálás teljes leállá
 ## Készítette: 
 
 Jakab Kristóf Márk - BL2NDD
+
 Kiss Vince Gergely - A2UWSD
