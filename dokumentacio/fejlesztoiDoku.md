@@ -39,15 +39,15 @@ Arduino IDE 2.0.1 futtatására alkalmas operációs rendszer:
 - SA-27 
 - OBO A11 
 
-### Fontosabb modulok leírása
+## Fontosabb modulok leírása
 
-#### Arduino Nano RP2040 Connect 
+### Arduino Nano RP2040 Connect 
 
 Az Arduino Nano RP2040 Connect az az Arduino Nano családba tartozó WIFI és Bluetooth modullal felszerelt mikrovezérlő. Képes az Internetre csatlakozni (ami szükséges) és továbbá, ha szükség lenne rá most a növény locsoló rendszerhez, akkor Bluetooth segítségével a közelében lévő Bluetooth eszközöket is tudnánk vezérelni. Egy a mikroszámítógép továbbá támogatja az Arduino Cloud fejlesztői felületet, és az integrálását. 
 
 A mikrovezérlőnek van 3.3 és 5V outputja (az utóbbi forrasztás után érhető el), amik képesek feszültséggel táplálni a ‘RELC-1CH-5V-UNI' relét, és a ‘SA-27’ vízérzékelőt. 
 
-#### RELC-1CH-5V-UNI 
+### RELC-1CH-5V-UNI 
 
 Ez egy 1 csatornás 5 Voltos opcionális vezérlésű relé optocsatolóval. Ez a legjobb relé, amit találtunk és úgy gondoljuk, hogy teszi a dolgát. Ahogy az elején le lett írva, 5V feszültséggel lehet kapcsolni és alacsony, illetve magas vezérlő jel opcióban is lehet vezérelni, de most a mi projektünknél magas feszültség beállításban lesz. 
 
