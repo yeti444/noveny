@@ -69,7 +69,7 @@ Ez a vízpumpa, amely a vizet fogja majd pumpálni egy tartájból. 12V tápfesz
 
 ### Könyvtárak:
 
-### src.ino teljes kódja
+### src.ino teljes kódja:
 
 ```c++
 #include "arduino_secrets.h" 
@@ -195,7 +195,8 @@ void moist() {
 
   soilMoisturePercent = map(soilMoistureValue, DryValue, WetValue, 0, 100);  // "map-oljuk" a %-ra 
 
-  soilMoisturePercent = constrain(soilMoisturePercent, 0, 100); // hibakezelés 0-nál alacsonyabb illteve 100-nál magasabb % érték kiküszöbölése 
+  soilMoisturePercent = constrain(soilMoisturePercent, 0, 100); 
+  // hibakezelés 0-nál alacsonyabb illteve 100-nál magasabb % érték kiküszöbölése 
 
   current_Moisture = soilMoisturePercent; 
 
@@ -215,4 +216,82 @@ void onTriggerLevelChange() {
 
 }
 ```
+Ez a MAIN.ino teljes kódja, és ez lesz, ami ténylegesen tartalmazza a főbb dolgokat, melyeket a későbbiekben részletezünk majd. 
+
+### void pumpOn() függyvény:
+
+```c++
+void pumpOn() { 
+
+  digitalWrite(Relaypin, HIGH); 
+
+  pump_status_text = "ON"; 
+
+  pump_Status = true; 
+
+  ArduinoCloud.update(); 
+
+} 
+```
+Ez a függvény azt csinálja, hogy a relé portjára először is egy magas jelet küld, ami megnyitja a pumpát. Ezután a következő három sor az IOT Cloud felületének módosításához szügséges. 
+
+### void pumpOff() függyvény:
+
+```c++
+void pumpOff() { 
+
+  digitalWrite(Relaypin, LOW); 
+
+  pump_status_text = "OFF"; 
+
+  pump_Status = false; 
+
+  ArduinoCloud.update(); 
+
+} 
+```
+Ez a függvény azt csinálja, hogy a relé portja fele egy alacsony jelet küld, ami lekapcsolja a pumpát. Ezután a következő három sor az IOT Cloud felületének módosításához szügséges. 
+
+### void moist() függvény:
+
+```c++
+void moist() { 
+
+  soilMoistureValue = analogRead(sensorPin); 
+
+  soilMoisturePercent = map(soilMoistureValue, DryValue, WetValue, 0, 100); 
+
+  soilMoisturePercent = constrain(soilMoisturePercent, 0, 100);             
+
+  current_Moisture = soilMoisturePercent; 
+
+ 
+
+  Serial.println(soilMoistureValue); 
+
+  ArduinoCloud.update(); 
+
+  delay(1000); 
+
+} 
+```
+Ez a függvény az első sorában a nedvességérzékelőről olvassa le az értéket 400 és 1000 között (analogRead), ezután ezt 0 és 100 közötti értékbe fogja a következő két sorban, ezután a maradék sorban az IOT Cloud felülettel kommunikál és vár egy másodpercet. 
+
+### Működési vázlat szimuláció online
+
+A működési vázlatok nagy részét online raktuk össze a circuit.io nevű oldal segítségével, mely nagyban megkönnyítette a munkánkat már a tervezési folyamatoktól egészen a hibakezelésig az utolsó simításoknál. Mivel majdnem minden alkatrész megtalálható volt ezen az oldalon ezért csak ajánlani tudjuk. 
+
+Az ábrát azonban kézzel lett elkészítve, mivel a circuit.io oldal “breadboard” felhasználásával rakta össze az áramkört, de mi annak a használata nélkül valósítottuk meg. 
+
+
+
+
+
+
+
+
+
+
+
+
 
