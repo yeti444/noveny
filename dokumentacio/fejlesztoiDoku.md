@@ -71,7 +71,7 @@ Ez a vízpumpa, amely a vizet fogja majd pumpálni egy tartájból. 12V tápfesz
 
 ### src.ino teljes kódja
 
-```
+```c++
 #include "arduino_secrets.h" 
 
 #include "thingProperties.h" 
