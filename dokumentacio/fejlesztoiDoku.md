@@ -27,7 +27,7 @@ Arduino IDE 2.0.1 futtatására alkalmas operációs rendszer:
 
 ### Arduino Cloud – IOT Cloud
 
-<!-- Sok kép nem később ki kell fejteni -->
+<!-- Sok kép, később ki kell fejteni -->
 
 ### Felhasznált modulok
 
@@ -283,15 +283,28 @@ A működési vázlatok nagy részét online raktuk össze a circuit.io nevű ol
 
 Az ábrát azonban kézzel lett elkészítve, mivel a circuit.io oldal “breadboard” felhasználásával rakta össze az áramkört, de mi annak a használata nélkül valósítottuk meg. 
 
+### Kapcsolási rajz
 
+### képek az eszközről
 
+### Fejlesztési lehetőségek
 
+A most elkészült szerkezet egy prototípus megoldás, mely otthoni szakszerű használat mellett megfelelő nem túl vízigényes növényekhez. 
 
+Megfordult még a fejünkben: 
 
+- Vízállóság javítása, jelen állapotában nagyon oda kell figyelni, hogy az eszköz, érzékelőn kívüli részeihez ne érjen egy csepp víz sem. 
+- Amellett, hogy figyeljük a talajnedvességét, azt nem figyeljük, hogy a tartályunkban mennyi még a víz ezt a problémát most úgy küszöböltük ki, hogy elég nagy edényt alkalmazunk több locsolás alkalmára. Arra, hogy ezt mikor tölti újra a felhasználónak kell figyelnie. Egy köztes megoldás még az lehetne, hogy letiltjuk a pumpát, ha nincs mit tolnia és jelzést küldenénk a felhasználónak. 
+- Egyéb talajtípusok, bizonyos talajtípusoknál megfigyeltük, hogy a víz gyorsan elfolyik így az érzékelőnktől másmilyen működés lenne elvárt. 
 
+### Készítette: 
 
+Jakab Kristóf Márk - BL2NDD 
 
+Kiss Vince Gergely – A2UWSD 
 
+Tantárgy kódja: GKNB_INTM020 
 
+Neve: Mikroelektromechanikai rendszerek 
 
-
+<!-- Még kifejtendő: Kapcsolási rajz, Képek az eszközről, Arduino Cloud – IOT Cloud, Könyvtárak  -->
