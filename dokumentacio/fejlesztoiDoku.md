@@ -57,3 +57,205 @@ Mérete apró: 26x50x20 mm, és ez miatt könnyen belefér a ‘OBO A11’ kis t
 
 Hozzáadott bónusz az, hogy led-del van felszerelve, és így lehet látni, ha be van kapcsolva, vagy ha ki van kapcsolva. 
 
+### SA-27 
+
+Ez lesz a vízérzékelő modul a szerkezetben, és egyben a (szerintünk) második legfontosabb komponens a mikrovezérlő után. Ez egy olcsó rezisztív talajnedvesség érzékelő modul, ami azt jelenti, hogy nem olyan strapabíró, mint a kapacitív testvére, de könnyű előállítani, kisebb, és bónuszként esetlegesen fém mérgezi a talajt hosszas használat után, mivel a feszültség hatására korrózál az érzékelő fejben lévő fém. 
+
+### AD20P-1230C 
+
+Ez a vízpumpa, amely a vizet fogja majd pumpálni egy tartájból. 12V tápfeszültség szükséges neki, 350mA mellett. Meglehetősen erős, szóval figyelembe kellett venni azt az algoritmus tervezése során, hogy el ne árassza a növényt a locsolás során. 
+
+## Algoritmusok és kódok
+
+### Könyvtárak:
+
+### src.ino teljes kódja
+
+```
+#include "arduino_secrets.h" 
+
+#include "thingProperties.h" 
+
+ 
+ 
+
+int Relaypin = 2; 
+
+int sensorPin = A0; 
+
+ 
+ 
+
+int sensorValue; 
+
+int soilMoistureValue; 
+
+int soilMoisturePercent; 
+
+ 
+ 
+
+const int DryValue = 1000;  // a setupCode-ban látható módon szereztük meg 
+
+const int WetValue = 400;   // ugyan így 
+
+int pump_trigger = 30; 
+
+String pump_status_text = "OFF"; 
+
+ 
+ 
+ 
+
+int period1 = 2000;  // 2 másodperc 
+
+int period2 = 10000;  // 10 másodperc 
+
+unsigned long time_now = 0; 
+
+ 
+ 
+ 
+
+void setup() { 
+
+  Serial.begin(9600); 
+
+  delay(1500); 
+
+ 
+ 
+
+  initProperties(); 
+
+ 
+ 
+ 
+
+  ArduinoCloud.begin(ArduinoIoTPreferredConnection);  // Az arduino cloud szolgáltatását vettük ígénybe 
+
+ 
+ 
+
+  pinMode(Relaypin, OUTPUT); 
+
+  digitalWrite(Relaypin, LOW); 
+
+  pump_Status = false; 
+
+ 
+ 
+
+  pinMode(sensorPin, INPUT); 
+
+ 
+ 
+
+  setDebugMessageLevel(2); 
+
+  ArduinoCloud.printDebugInfo(); 
+
+} 
+
+ 
+ 
+
+void loop() { 
+
+ 
+ 
+ 
+
+  if (soilMoisturePercent <= pump_trigger) { 
+
+ 
+ 
+
+    time_now = millis(); 
+
+    while (millis() < time_now + period1) { 
+
+      pumpOn(); 
+
+      moist(); 
+
+    } 
+
+  } 
+
+ 
+ 
+
+  time_now = millis(); 
+
+  while (millis() < time_now + period2) { 
+
+    pumpOff(); 
+
+    moist(); 
+
+  } 
+
+} 
+
+ 
+ 
+
+void pumpOn() { 
+
+  digitalWrite(Relaypin, HIGH); 
+
+  pump_status_text = "ON"; 
+
+  pump_Status = true; 
+
+  ArduinoCloud.update(); 
+
+} 
+
+ 
+ 
+
+void pumpOff() { 
+
+  digitalWrite(Relaypin, LOW); 
+
+  pump_status_text = "OFF"; 
+
+  pump_Status = false; 
+
+  ArduinoCloud.update(); 
+
+} 
+
+ 
+ 
+
+void moist() { 
+
+  soilMoistureValue = analogRead(sensorPin); 
+
+  soilMoisturePercent = map(soilMoistureValue, DryValue, WetValue, 0, 100);  // "map-oljuk" a %-ra 
+
+  soilMoisturePercent = constrain(soilMoisturePercent, 0, 100);              // hibakezelés 0-nál alacsonyabb illteve 100-nál magasabb % érték kiküszöbölése 
+
+  current_Moisture = soilMoisturePercent; 
+
+ 
+ 
+
+  Serial.println(soilMoistureValue); 
+
+  ArduinoCloud.update(); 
+
+  delay(1000); 
+
+} 
+
+void onTriggerLevelChange() { 
+
+  pump_trigger = trigger_Level; 
+
+}
+```
+
