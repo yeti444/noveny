@@ -1,5 +1,5 @@
-#include "arduino_secrets.h"
 #include "thingProperties.h"
+#include "arduino_secrets"
 
 int Relaypin = 2;
 int sensorPin = A0;
@@ -14,10 +14,11 @@ int pump_trigger = 30;
 String pump_status_text = "OFF";
 
 
-int period1 = 2000;  // 2 másodperc
-int period2 = 10000;  // 10 másodperc
+int periodShort = 1500;  // 1,5 másodperc
+int periodLong = 10000;  // 10 másodperc
+int periodUpdate = 5000;  // 5 másodperc
 unsigned long time_now = 0;
-
+unsigned long time_nowUpdate = 0;
 
 void setup() {
   Serial.begin(9600);
@@ -26,7 +27,7 @@ void setup() {
   initProperties();
 
 
-  ArduinoCloud.begin(ArduinoIoTPreferredConnection);  // Az arduino cloud szolgáltatását vettük ígénybe
+  ArduinoCloud.begin(ArduinoIoTPreferredConnection, false);  // Az arduino cloud szolgáltatását vettük ígénybe
 
   pinMode(Relaypin, OUTPUT);
   digitalWrite(Relaypin, LOW);
@@ -39,35 +40,69 @@ void setup() {
 }
 
 void loop() {
-
-
+  
+  moist();
+  
   if (soilMoisturePercent <= pump_trigger) {
+  pumpOn();
+  time_now = millis();
 
-    time_now = millis();
-    while (millis() < time_now + period1) {
-      pumpOn();
-      moist();
+  while(millis() < time_now + periodShort)
+  {
+    moist();
+    delay(1000);
+    if(millis() >= time_nowUpdate + periodUpdate)
+    {
+        time_nowUpdate += periodUpdate;
+        ArduinoCloud.update();
     }
   }
-
+  
+  
+  
+  pumpOff();
   time_now = millis();
-  while (millis() < time_now + period2) {
-    pumpOff();
+  
+  while(millis() < time_now + periodLong)
+  {
     moist();
+    delay(1000);
+    if(millis() >= time_nowUpdate + periodUpdate)
+    {
+        time_nowUpdate += periodUpdate;
+        ArduinoCloud.update();
+    }
   }
+  
+  }
+  else
+  {
+    delay(1000);
+  }
+  
+  
+  if(millis() >= time_nowUpdate + periodUpdate){
+        time_nowUpdate += periodUpdate;
+        ArduinoCloud.update();
+  }
+  
+  
 }
 
 void pumpOn() {
   digitalWrite(Relaypin, HIGH);
   pump_status_text = "ON";
   pump_Status = true;
+  moist();
   ArduinoCloud.update();
+  
 }
 
 void pumpOff() {
   digitalWrite(Relaypin, LOW);
   pump_status_text = "OFF";
   pump_Status = false;
+  moist();
   ArduinoCloud.update();
 }
 
@@ -76,10 +111,7 @@ void moist() {
   soilMoisturePercent = map(soilMoistureValue, DryValue, WetValue, 0, 100);  // "map-oljuk" a %-ra
   soilMoisturePercent = constrain(soilMoisturePercent, 0, 100);              // hibakezelés 0-nál alacsonyabb illteve 100-nál magasabb % érték kiküszöbölése
   current_Moisture = soilMoisturePercent;
-
   Serial.println(soilMoistureValue);
-  ArduinoCloud.update();
-  delay(1000);
 }
 void onTriggerLevelChange() {
   pump_trigger = trigger_Level;
