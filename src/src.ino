@@ -1,5 +1,6 @@
 #include "thingProperties.h"
 #include "arduino_secrets"
+#include "discord.h"
 
 int Relaypin = 2;
 int sensorPin = A0;
@@ -26,7 +27,7 @@ void setup() {
 
   initProperties();
 
-
+  connect_to_wifi();
   ArduinoCloud.begin(ArduinoIoTPreferredConnection, false);  // Az arduino cloud szolgáltatását vettük ígénybe
 
   pinMode(Relaypin, OUTPUT);
@@ -37,56 +38,58 @@ void setup() {
 
   setDebugMessageLevel(2);
   ArduinoCloud.printDebugInfo();
+
+  discord_send("BETA : A program elindult !");
 }
 
 void loop() {
-  
-  moist();
-  
-  if (soilMoisturePercent <= pump_trigger) {
-  pumpOn();
-  time_now = millis();
 
-  while(millis() < time_now + periodShort)
-  {
-    moist();
-    delay(1000);
-    if(millis() >= time_nowUpdate + periodUpdate)
+  moist();
+
+  if (soilMoisturePercent <= pump_trigger) {
+    pumpOn();
+    time_now = millis();
+
+    while (millis() < time_now + periodShort)
     {
+      moist();
+      delay(1000);
+      if (millis() >= time_nowUpdate + periodUpdate)
+      {
         time_nowUpdate += periodUpdate;
         ArduinoCloud.update();
+      }
     }
-  }
-  
-  
-  
-  pumpOff();
-  time_now = millis();
-  
-  while(millis() < time_now + periodLong)
-  {
-    moist();
-    delay(1000);
-    if(millis() >= time_nowUpdate + periodUpdate)
+
+
+
+    pumpOff();
+    time_now = millis();
+
+    while (millis() < time_now + periodLong)
     {
+      moist();
+      delay(1000);
+      if (millis() >= time_nowUpdate + periodUpdate)
+      {
         time_nowUpdate += periodUpdate;
         ArduinoCloud.update();
+      }
     }
-  }
-  
+
   }
   else
   {
     delay(1000);
   }
-  
-  
-  if(millis() >= time_nowUpdate + periodUpdate){
-        time_nowUpdate += periodUpdate;
-        ArduinoCloud.update();
+
+
+  if (millis() >= time_nowUpdate + periodUpdate) {
+    time_nowUpdate += periodUpdate;
+    ArduinoCloud.update();
   }
-  
-  
+
+
 }
 
 void pumpOn() {
@@ -95,7 +98,7 @@ void pumpOn() {
   pump_Status = true;
   moist();
   ArduinoCloud.update();
-  
+
 }
 
 void pumpOff() {
