@@ -101,11 +101,15 @@ String pump_status_text = "OFF";
 
  
 
-int period1 = 2000;  // 2 másodperc 
+int periodShort = 1500;  // 1,5 másodperc
 
-int period2 = 10000;  // 10 másodperc 
+int periodLong = 10000;  // 10 másodperc
 
-unsigned long time_now = 0; 
+int periodUpdate = 5000;  // 5 másodperc
+
+unsigned long time_now = 0;
+
+unsigned long time_nowUpdate = 0;
 
  
 
@@ -138,32 +142,84 @@ void setup() {
 
 }
 
-void loop() { 
+void loop() {
+  
+  moist();
+  
+  if (soilMoisturePercent <= pump_trigger) {
+  
+  pumpOn();
+  
+  time_now = millis();
 
-  if (soilMoisturePercent <= pump_trigger) { 
-
-    time_now = millis(); 
-
-    while (millis() < time_now + period1) { 
-
-      pumpOn(); 
-
-      moist(); 
-
+  while(millis() < time_now + periodShort)
+  
+  {
+  
+    moist();
+    
+    delay(1000);
+    
+    if(millis() >= time_nowUpdate + periodUpdate)
+    
+    {
+    
+        time_nowUpdate += periodUpdate;
+        
+        ArduinoCloud.update();
+        
     }
-  } 
- 
-  time_now = millis(); 
-
-  while (millis() < time_now + period2) { 
-
-    pumpOff(); 
-
-    moist(); 
-
-  } 
-
-} 
+    
+  }
+  
+  
+  
+  pumpOff();
+  
+  time_now = millis();
+  
+  while(millis() < time_now + periodLong)
+  
+  {
+  
+    moist();
+    
+    delay(1000);
+    
+    if(millis() >= time_nowUpdate + periodUpdate)
+    
+    {
+    
+        time_nowUpdate += periodUpdate;
+        
+        ArduinoCloud.update();
+        
+    }
+    
+  }
+  
+  
+  }
+  
+  else
+  
+  {
+  
+    delay(1000);
+    
+  }
+  
+  
+  if(millis() >= time_nowUpdate + periodUpdate){
+  
+        time_nowUpdate += periodUpdate;
+        
+        ArduinoCloud.update();
+        
+  }
+  
+  
+}
 
 void pumpOn() { 
 
@@ -172,7 +228,9 @@ void pumpOn() {
   pump_status_text = "ON"; 
 
   pump_Status = true; 
-
+  
+  moist();
+  
   ArduinoCloud.update(); 
 
 } 
@@ -184,7 +242,9 @@ void pumpOff() {
   pump_status_text = "OFF"; 
 
   pump_Status = false; 
-
+  
+  moist();
+  
   ArduinoCloud.update(); 
 
 }
@@ -200,13 +260,7 @@ void moist() {
 
   current_Moisture = soilMoisturePercent; 
 
-
-
   Serial.println(soilMoistureValue); 
-
-  ArduinoCloud.update(); 
-
-  delay(1000); 
 
 } 
 
@@ -216,7 +270,7 @@ void onTriggerLevelChange() {
 
 }
 ```
-Ez a MAIN.ino teljes kódja, és ez lesz, ami ténylegesen tartalmazza a főbb dolgokat, melyeket a későbbiekben részletezünk majd. 
+Ez a(z) src.ino teljes kódja, és ez lesz, ami ténylegesen tartalmazza a főbb dolgokat, melyeket a későbbiekben részletezünk majd. 
 
 ### void pumpOn() függyvény:
 
@@ -228,12 +282,14 @@ void pumpOn() {
   pump_status_text = "ON"; 
 
   pump_Status = true; 
-
+  
+  moist();
+  
   ArduinoCloud.update(); 
 
 } 
 ```
-Ez a függvény azt csinálja, hogy a relé portjára először is egy magas jelet küld, ami megnyitja a pumpát. Ezután a következő három sor az IOT Cloud felületének módosításához szügséges. 
+Ez a függvény azt csinálja, hogy a relé portjára először is egy magas jelet küld, ami megnyitja a pumpát. Ezután a két sorban a pumpa led állapotát állítja ON-ra, ezután mér egyet a moist() függyvénnyel, aztán küld egy updatet a(z) Arduino Cloud - nak.
 
 ### void pumpOff() függyvény:
 
@@ -250,7 +306,7 @@ void pumpOff() {
 
 } 
 ```
-Ez a függvény azt csinálja, hogy a relé portja fele egy alacsony jelet küld, ami lekapcsolja a pumpát. Ezután a következő három sor az IOT Cloud felületének módosításához szügséges. 
+Ez a függvény azt csinálja, hogy a relé portjára először is egy alacsony jelet küld, ami lekapcsolja a pumpát. Ezután a két sorban a pumpa led állapotát állítja OFF-ra, ezután mér egyet a moist() függyvénnyel, aztán küld egy updatet a(z) IOT Cloud felüleltnek - nak.
 
 ### void moist() függvény:
 
@@ -265,17 +321,11 @@ void moist() {
 
   current_Moisture = soilMoisturePercent; 
 
- 
-
   Serial.println(soilMoistureValue); 
-
-  ArduinoCloud.update(); 
-
-  delay(1000); 
 
 } 
 ```
-Ez a függvény az első sorában a nedvességérzékelőről olvassa le az értéket 400 és 1000 között (analogRead), ezután ezt 0 és 100 közötti értékbe fogja a következő két sorban, ezután a maradék sorban az IOT Cloud felülettel kommunikál és vár egy másodpercet. 
+Ez a függvény az első sorában a nedvességérzékelőről olvassa le az értéket 400 és 1000 között (analogRead), ezután ezt 0 és 100 közötti értékbe fogja a következő két sorban, ezután az utolsó sorban az IOT Cloud felülettel kommunikál.
 
 ### Működési vázlat szimuláció online
 
